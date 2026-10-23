@@ -36,12 +36,13 @@ npx tauri build
 
 安装包按当前用户安装，无需管理员权限。默认使用 `downloadBootstrapper`，系统缺少 WebView2 时会尝试安装。
 
-当前已整理好的发布目录 `dist/`：
+已发布的 Windows x64 安装包在 [GitHub Releases](https://github.com/flyingpig233-cpu/pull-lessons/releases/tag/v0.1.0)：
 
 - `pull-lessons_0.1.0_x64-setup.exe`：Windows 安装包
 - `pull-lessons_0.1.0_windows_x64_portable.zip`：便携版（解压运行 `pull-lessons-desktop.exe`）
 - `SHA256SUMS.txt`：校验和
-- `发布说明.txt`：给用户的运行说明
+
+发布前打包好的文件放在本地 `dist/`（已加入 `.gitignore`，不会提交），也可以直接从 `target/release/` 取用。
 
 安装包未做代码签名，Windows SmartScreen 可能提示“未知发布者”，需要选择“更多信息 → 仍要运行”。如果要公开发布，建议使用代码签名证书对 exe 和安装包签名。
 
