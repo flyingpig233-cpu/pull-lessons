@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HUST 公选课抢课助手</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 登录页 -->
+  <section id="login-screen" class="login-screen hidden">
+    <div class="login-aurora" aria-hidden="true"></div>
+    <div class="login-grid" aria-hidden="true"></div>
+
+    <div class="login-card">
+      <div class="brand-mark large" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/>
+          <path d="M4 5.5v15"/>
+          <path d="M12.5 7.5 10 12h3l-1.5 4.5L15 11h-3z"/>
+        </svg>
+      </div>
+
+      <h1>HUST 公选课抢课助手</h1>
+      <p class="login-subtitle">登录华中科技大学统一身份认证，开始监控与抢课</p>
+
+      <div id="login-status" class="login-status info">
+        <span class="status-dot"></span>
+        <span id="login-status-text">正在连接本地服务…</span>
+      </div>
+
+      <button id="btn-login" class="btn primary block" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <path d="m10 17 5-5-5-5"/><path d="M15 12H3"/>
+        </svg>
+        打开学校登录窗口
+      </button>
+
+      <button id="btn-sync" class="btn ghost block hidden" type="button">已登录？重新同步</button>
+
+      <ol class="login-steps">
+        <li><span>1</span><div><strong>打开登录窗口</strong><small>在弹窗中完成统一身份认证</small></div></li>
+        <li><span>2</span><div><strong>自动读取会话</strong><small>登录成功后自动同步到本地助手</small></div></li>
+        <li><span>3</span><div><strong>开始监听课程</strong><small>选择多门课程，谁有余量抢谁</small></div></li>
+      </ol>
+
+      <p class="login-note">登录信息只保存在本机，不会上传到任何第三方服务。</p>
+    </div>
+  </section>
+
+  <!-- 主界面 -->
+  <section id="app-screen" class="app hidden">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/>
+            <path d="M4 5.5v15"/>
+            <path d="M12.5 7.5 10 12h3l-1.5 4.5L15 11h-3z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <strong>公选课抢课助手</strong>
+          <span>HUST · 主校区选课</span>
+        </div>
+      </div>
+
+      <div class="topbar-meta">
+        <span id="term-pill" class="pill">—</span>
+        <span id="round-pill" class="pill subtle">—</span>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="btn-selected" class="btn ghost" type="button">已选课程</button>
+        <button id="btn-refresh" class="btn ghost icon" type="button" title="刷新课程">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/>
+          </svg>
+        </button>
+        <div class="user-chip">
+          <span id="user-avatar" class="avatar">徐</span>
+          <div class="user-text">
+            <strong id="user-name">—</strong>
+            <small id="user-account">—</small>
+          </div>
+        </div>
+        <button id="btn-logout" class="btn ghost danger" type="button">退出</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- 课程列表 -->
+      <section class="courses-panel">
+        <div class="panel-head">
+          <div>
+            <h2>可选课程</h2>
+            <p class="panel-sub">勾选多门课程加入监听，任意一门释放余量就会立即抢课</p>
+          </div>
+          <div class="toolbar">
+            <label class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+              </svg>
+              <input id="search-input" type="search" placeholder="搜索课程、代码、院系、教师" autocomplete="off" />
+            </label>
+            <select id="category-select" class="select" title="公共课大类">
+              <option value="">全部大类</option>
+            </select>
+            <label class="switch-label" title="只看有余量的课程">
+              <input id="only-available" type="checkbox" />
+              <span class="switch"></span>
+              只看有余量
+            </label>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat">
+            <span class="stat-label">课程总数</span>
+            <strong id="stat-total">—</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">当前有余量</span>
+            <strong id="stat-available">—</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">剩余名额合计</span>
+            <strong id="stat-remaining">—</strong>
+          </div>
+          <div class="stat">
+            <span class="stat-label">已监听</span>
+            <strong id="stat-monitored">0</strong>
+          </div>
+        </div>
+
+        <div id="course-list" class="course-list">
+          <div class="loading-state">
+            <span class="spinner"></span>
+            <span>正在加载课程…</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 监听面板 -->
+      <aside class="monitor-panel">
+        <div class="monitor-head">
+          <div>
+            <h2>监听队列</h2>
+            <p class="panel-sub">按添加顺序优先抢课</p>
+          </div>
+          <span id="monitor-count" class="count-badge">0</span>
+        </div>
+
+        <div id="monitor-queue" class="monitor-queue">
+          <div class="empty-state small">
+            <div class="empty-icon">＋</div>
+            <p>还没有监听课程</p>
+            <small>在左侧课程卡片上点击“加入监听”</small>
+          </div>
+        </div>
+
+        <div class="monitor-controls">
+          <label class="field">
+            <span>轮询间隔</span>
+            <select id="interval-select" class="select">
+              <option value="500">500 ms</option>
+              <option value="800" selected>800 ms</option>
+              <option value="1000">1 秒</option>
+              <option value="1500">1.5 秒</option>
+              <option value="2000">2 秒</option>
+            </select>
+          </label>
+          <div class="control-buttons">
+            <button id="btn-start" class="btn primary grow" type="button" disabled>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              开始监听
+            </button>
+            <button id="btn-stop" class="btn danger grow hidden" type="button">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+              停止
+            </button>
+          </div>
+          <p id="monitor-hint" class="hint">监听期间会持续查询课程余量，有余量时立刻提交选课。</p>
+        </div>
+
+        <div id="grab-status" class="grab-status hidden">
+          <div class="grab-status-head">
+            <span id="grab-state" class="grab-state idle">待启动</span>
+            <span id="grab-elapsed" class="grab-elapsed">00:00</span>
+          </div>
+          <div class="grab-metrics">
+            <div><span>轮询</span><strong id="grab-attempts">0</strong></div>
+            <div><span>提交</span><strong id="grab-calls">0</strong></div>
+            <div><span>结果</span><strong id="grab-result">—</strong></div>
+          </div>
+          <p id="grab-message" class="grab-message">等待启动监听…</p>
+          <div class="grab-logs-wrap">
+            <div class="grab-logs-head">运行日志</div>
+            <div id="grab-logs" class="grab-logs"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </section>
+
+  <div id="toast-root" class="toast-root"></div>
+  <div id="modal-root" class="modal-root hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

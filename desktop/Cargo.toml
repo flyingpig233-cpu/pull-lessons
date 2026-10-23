@@ -1,0 +1,17 @@
+[package]
+name = "pull-lessons-desktop"
+version = "0.1.0"
+edition = "2024"
+description = "HUST 公选课抢课助手"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+pull-lessons = { path = ".." }
+reqwest = { version = "0.13", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "2", features = [] }
+tokio = { version = "1", features = ["time"] }
+tracing = "0.1"

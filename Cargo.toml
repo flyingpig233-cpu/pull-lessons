@@ -1,0 +1,21 @@
+[package]
+name = "pull-lessons"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+members = ["desktop"]
+resolver = "2"
+
+[dependencies]
+axum = "0.8"
+dirs = "7"
+regex = "1"
+reqwest = { version = "0.13", features = ["json", "form"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "time", "signal", "sync", "fs"] }
+tower-http = { version = "0.7", features = ["cors", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
